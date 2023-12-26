@@ -1,0 +1,8 @@
+1 : git clone ;;link;;
+2 : mkvirtualenv --python=/usr/bin/python3.10 env_name 
+3: pip install django
+4: create new tab app
+   I)manual confing -- same python version
+   II) change wigi path to where manage.py is present;; and settings to
+   III) in settings.py modify allowed hosts
+refe:: https://www.youtube.com/watch?v=xtnUwvjOThg
