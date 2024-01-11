@@ -1,207 +1,264 @@
-</html>
 <!-- myapp/templates/myapp/create_matrix.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matrix : </title>
+  <title>Create Matrix</title>
   <style>
-    table {
-      border-collapse: collapse;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    table, th, td {
-      border: 1px solid black;
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="number"] {
+      width: 50px;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    table {
+      width: 200px; /* Adjust the width as needed */
+      max-height: 200px; /* Adjust the height as needed */
+      overflow: auto;
+      border-collapse: collapse;
+      margin-top: 20px;
     }
 
     th, td {
-      padding: 10px;
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
     }
+
+    h2 {
+      color: #333;
+    }
+
+    p {
+      margin: 10px 0;
+      color: #555;
+    }
+
     .single-line {
-      display: inline; /* Make elements with class 'single-line' display inline */
-      margin: 0; /* Remove default margin */
+      display: inline;
+      margin: 0;
+      color: #333;
     }
   </style>
-  <title>Create Matrix</title>
 </head>
 <body>
 
-<form id="matrixForm" method="post" action="">
-  {% csrf_token %}
-  
-  <label for="id_rows">Number of Rows :</label>
-  <input onchange="on_change()" type="number" name="rows" id="id_rows" min="1" required>
-
-  <label for="id_cols">Number of Columns :</label>
-  <input onchange="on_change()" type="number" name="cols" id="id_cols" min="1" required>
-
-  <button onclick="createInputBoxes()" >Create Matrix</button>
-  <div id="inputBoxesContainer"></div>
-  <input type="submit" value ="calculate" id = "submitButton" disabled>
-</form>
-
-<script>
-function on_change()
-    {
-    var r = document.getElementById("123");
-    r.innerHTML = "";
-    }
-function createInputBoxes() 
-{
-    on_change();
-  var rows = document.getElementById("id_rows").value;
-  var cols = document.getElementById("id_cols").value;
-
-  var container = document.getElementById("inputBoxesContainer");
-  container.innerHTML = "";  // Clear previous content
-
-  for (var i = 0; i < rows; i++) {
-    for (var j = 0; j < cols; j++) {
-      var input = document.createElement("input");
-      input.type = "number";
-      input.name = "matrix[" + i + "][" + j + "]";
-      input.placeholder = "m" + i + "][" + j + "]";
-      input.required = true;
-      input.addEventListener("input", checkMatrixFilled);  // Add input event listener
-      container.appendChild(input);
-    }
-    container.appendChild(document.createElement("br"));  // Line break after each row
-  }
-}
-window.onload = function() 
-{
-onPageLoad();
-}
-function onPageLoad() 
-{
-  var x = {{ data.row_space_dim | default:"99" }};
-  if(x!=0 && x!=99)
-  {
-    var container = document.getElementById("id_rows");
-    container.value = {{ data.rows|default:"1" }};
-    var container = document.getElementById("id_cols");
-    container.value = {{ data.rows|default:"1" }};
+  <form id="matrixForm" method="post" action="">
+    {% csrf_token %}
     
-  }
-  else
-  {
-    console.log('laude1');
-  }
-}
+    <label for="id_rows">Number of Rows:</label>
+    <input onchange="on_change()" type="number" name="rows" id="id_rows" min="1" required>
+
+    <label for="id_cols">Number of Columns:</label>
+    <input onchange="on_change()" type="number" name="cols" id="id_cols" min="1" required>
+
+    <button onclick="createInputBoxes()">Create Matrix</button>
+    <div id="inputBoxesContainer"></div>
+    <input type="submit" value="Calculate" id="submitButton" disabled>
+  </form>
 
 
-function checkMatrixFilled() {
-  var inputs = document.querySelectorAll("#inputBoxesContainer input");
-  var isMatrixFilled = true;
-
-  inputs.forEach(function(input) 
-  {
-    if (input.value === "") 
+  <script>
+    function on_change()
+        {
+        var r = document.getElementById("123");
+        r.innerHTML = "";
+        }
+    function createInputBoxes() 
     {
-      isMatrixFilled = false;
+        on_change();
+      var rows = document.getElementById("id_rows").value;
+      var cols = document.getElementById("id_cols").value;
+    
+      var container = document.getElementById("inputBoxesContainer");
+      container.innerHTML = "";  // Clear previous content
+    
+      for (var i = 0; i < rows; i++) {
+        for (var j = 0; j < cols; j++) {
+          var input = document.createElement("input");
+          input.type = "number";
+          input.name = "matrix[" + i + "][" + j + "]";
+          input.placeholder = "m" + i + "][" + j + "]";
+          input.required = true;
+          input.addEventListener("input", checkMatrixFilled);  // Add input event listener
+          container.appendChild(input);
+        }
+        container.appendChild(document.createElement("br"));  // Line break after each row
+      }
     }
-  });
-
-  // Enable or disable the submit button based on whether the matrix is filled
-  document.getElementById("submitButton").disabled = !isMatrixFilled;
-}
-</script>
-
-<div id="123">
-{% if data %}
-<h2>Matrix Display:</h2>
-
-  <table>
-    {% for row in data.MATRIX %}
-      <tr>
-        {% for element in row %}
-          <td>{{ element }}</td>
+    window.onload = function() 
+    {
+    onPageLoad();
+    }
+    function onPageLoad() 
+    {
+      var x = {{ data.row_space_dim | default:"99" }};
+      if(x!=0 && x!=99)
+      {
+        var container = document.getElementById("id_rows");
+        container.value = {{ data.rows|default:"1" }};
+        var container = document.getElementById("id_cols");
+        container.value = {{ data.rows|default:"1" }};
+        
+      }
+      else
+      {
+        console.log('laude1');
+      }
+    }
+    
+    
+    function checkMatrixFilled() {
+      var inputs = document.querySelectorAll("#inputBoxesContainer input");
+      var isMatrixFilled = true;
+    
+      inputs.forEach(function(input) 
+      {
+        if (input.value === "") 
+        {
+          isMatrixFilled = false;
+        }
+      });
+    
+      // Enable or disable the submit button based on whether the matrix is filled
+      document.getElementById("submitButton").disabled = !isMatrixFilled;
+    }
+    </script>
+    
+    <div id="123">
+    {% if data %}
+    <h2>Matrix Display:</h2>
+    
+      <table>
+        {% for row in data.MATRIX %}
+          <tr>
+            {% for element in row %}
+              <td>{{ element }}</td>
+            {% endfor %}
+          </tr>
         {% endfor %}
-      </tr>
-    {% endfor %}
-  </table>
-
-  <h2>Reduced Row Echlon form :</h2>
-
-  <table>
-    {% for row in data.RREF %}
-      <tr>
-        {% for element in row %}
-          <td>{{ element }}</td>
+      </table>
+    
+      <h2>Reduced Row Echlon form :</h2>
+    
+      <table>
+        {% for row in data.RREF %}
+          <tr>
+            {% for element in row %}
+              <td>{{ element }}</td>
+            {% endfor %}
+          </tr>
         {% endfor %}
-      </tr>
-    {% endfor %}
-  </table>
-  <h2 class="single-line">Rank of the matrix  :</h2><h4 class="single-line">{{ data.row_space_dim }}</h4>
+      </table>
+      <h2 class="single-line">Rank of the matrix  :</h2><h4 class="single-line">{{ data.row_space_dim }}</h4>
+    
+    <!-- Row Space -->
+    <h2>Row space: </h2>
+    {% if data.row_space_valid %}
+      <p>{ {% for row in data.row_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
+    {% else %}
+      <p>Row space having only a null vector</p>
+    {% endif %}
+    <p>Row space dimension: {{ data.row_space_dim }}</p>
+    
+    <!-- Column Space -->
+    <h2>Column space: </h2>
+    {% if data.col_space_valid %}
+      <p>{ {% for row in data.col_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
+    {% else %}
+      <p>Column space having only a null vector</p>
+    {% endif %}
+    <p>Column space dimension: {{ data.col_space_dim }}</p>
+    
+    <!-- Null Space -->
+    <h2>Null space: </h2>
+    {% if data.null_space_valid %}
+      <p>{ {% for row in data.null_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
+    {% else %}
+      <p>Null space having only a null vector</p>
+    {% endif %}
+    <p>Null space dimension: {{ data.null_space_dim }}</p>
+    
+    <!-- Left Null Space -->
+    <h2>Left Null space: </h2>
+    {% if data.l_null_space_valid %}
+      <p>{ {% for row in data.l_null_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
+    {% else %}
+      <p>Left null space having only a null vector</p>
+    {% endif %}
+    <p>Left null space dimension: {{ data.l_null_space_dim }}</p>
+    
+    
+    <h2>Eigenvalues</h2>
+    
+    {% if data.no_eigen_vals and data.rows == data.cols%}
+      <p>Number of Eigenvalues: {{ data.no_eigen_vals }}</p>
+      <p>[ {% for i in data.eigen_vals %}{{ i }}{% if not forloop.last %}, {% endif %}{% endfor %} ]</p>
+    {% else %}
+      <p>No eigenvalues available</p>
+    {% endif %}
+    
+    
+    <h2>Eigenvalues and Eigenvectors:</h2>
+    
+    {% if data.eigenvalues_and_vectors and data.rows == data.cols %}
+      {% for eigenvector_info in data.eigenvalues_and_vectors %}
+        <p>
+          Eigenvalue: {{ eigenvector_info.0 }}   ,   Multiplicity: {{ eigenvector_info.1 }}
+        </p>
+        <p>
+          Number of Eigenvectors: {{ eigenvector_info.2|length }}
+        </p>
+        <p>Eigenvectors:</p>
+        {{ '{' }}{% for eigenvector in eigenvector_info.2 %}{{ '(' }}{% for element in eigenvector %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}{{ ')' }}{% if not forloop.last %},{% endif %}{% endfor %}{{ '}' }}
+      {% endfor %}
+    {% else %}
+      <p>No eigenvalues and eigenvectors available.</p>
+    {% endif %}
+    
+    
+    {% endif %}
+    </div>
 
-<!-- Row Space -->
-<h2>Row space: </h2>
-{% if data.row_space_valid %}
-  <p>{ {% for row in data.row_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
-{% else %}
-  <p>Row space having only a null vector</p>
-{% endif %}
-<p>Row space dimension: {{ data.row_space_dim }}</p>
-
-<!-- Column Space -->
-<h2>Column space: </h2>
-{% if data.col_space_valid %}
-  <p>{ {% for row in data.col_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
-{% else %}
-  <p>Column space having only a null vector</p>
-{% endif %}
-<p>Column space dimension: {{ data.col_space_dim }}</p>
-
-<!-- Null Space -->
-<h2>Null space: </h2>
-{% if data.null_space_valid %}
-  <p>{ {% for row in data.null_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
-{% else %}
-  <p>Null space having only a null vector</p>
-{% endif %}
-<p>Null space dimension: {{ data.null_space_dim }}</p>
-
-<!-- Left Null Space -->
-<h2>Left Null space: </h2>
-{% if data.l_null_space_valid %}
-  <p>{ {% for row in data.l_null_space %}({% for element in row %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}){% if not forloop.last %},{% endif %}{% endfor %} }</p>
-{% else %}
-  <p>Left null space having only a null vector</p>
-{% endif %}
-<p>Left null space dimension: {{ data.l_null_space_dim }}</p>
-
-
-<h2>Eigenvalues</h2>
-
-{% if data.no_eigen_vals and data.rows == data.cols%}
-  <p>Number of Eigenvalues: {{ data.no_eigen_vals }}</p>
-  <p>[ {% for i in data.eigen_vals %}{{ i }}{% if not forloop.last %}, {% endif %}{% endfor %} ]</p>
-{% else %}
-  <p>No eigenvalues available</p>
-{% endif %}
-
-
-<h2>Eigenvalues and Eigenvectors:</h2>
-
-{% if data.eigenvalues_and_vectors and data.rows == data.cols %}
-  {% for eigenvector_info in data.eigenvalues_and_vectors %}
-    <p>
-      Eigenvalue: {{ eigenvector_info.0 }}   ,   Multiplicity: {{ eigenvector_info.1 }}
-    </p>
-    <p>
-      Number of Eigenvectors: {{ eigenvector_info.2|length }}
-    </p>
-    <p>Eigenvectors:</p>
-    {{ '{' }}{% for eigenvector in eigenvector_info.2 %}{{ '(' }}{% for element in eigenvector %}{{ element }}{% if not forloop.last %},{% endif %}{% endfor %}{{ ')' }}{% if not forloop.last %},{% endif %}{% endfor %}{{ '}' }}
-  {% endfor %}
-{% else %}
-  <p>No eigenvalues and eigenvectors available.</p>
-{% endif %}
-
-
-{% endif %}
-</div>
 </body>
 </html>
-
